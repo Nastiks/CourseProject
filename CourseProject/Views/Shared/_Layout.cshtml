@@ -1,0 +1,131 @@
+﻿@using CourseProject.Controllers;
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@using CourseProject_Utility
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]CourseProject</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    @{if (Context.Request.Cookies["theme"] == null)
+    {
+    <link href="~/css/light.css" rel="stylesheet" type="text/css" />
+    }
+    else
+    {
+    if (Context.Request.Cookies["theme"] == "dark")
+    {
+    <link href="~/css/darkly.css" rel="stylesheet" type="text/css" />
+    }
+            if (Context.Request.Cookies["theme"] == "light")
+    {
+    <link href="~/css/light.css" rel="stylesheet" type="text/css" />
+    }
+    }
+    }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+    <link href="~/FontAwesome/css/all.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/material.css" />
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet" />
+</head>
+<body class="body">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand">
+                    <ul class="animate-ul">
+                        <li>R</li>
+                        <li>E</li>
+                        <li>V</li>
+                        <li>I</li>
+                        <li>E</li>
+                        <li>W</li>
+                        <li>S</li>
+                    </ul>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="gradient-button" asp-area="" asp-controller="Home" asp-action="Index" style="margin-top: 10px">@sharedResource["Home"]</a>
+                        </li>
+                        @if (User.IsInRole(WC.AdminRole) || User.IsInRole(WC.UserRole))
+                        {
+                            @if (User.IsInRole(WC.AdminRole))
+                            {
+                                <li class="nav-item dropdown" style="margin-top: 10px">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        @sharedResource["UserManagement"]
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">@sharedResource["User"]</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">@sharedResource["CreateAdminUser"]</a>
+                                    </div>
+                                </li>
+                            }
+                            <li class="nav-item dropdown" style="margin-top: 10px">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    @sharedResource["ContentManagement"]
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Category" asp-action="Index">@sharedResource["Category"]</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Review" asp-action="Index">@sharedResource["Review"]</a>
+                                </div>
+                            </li>
+                        }
+                        <li style="margin-top: 10px">
+                            <a asp-action="Index" asp-controller="Like" class="nav-link">
+                                <i class="far fa-thumbs-up" style="color: #f7e439;"></i>
+                            </a>
+                        </li>
+                        <li style="margin-top: 10px">
+                            <a asp-controller="Theme" asp-action="ChangeTheme" class="nav-link">
+                                <i class="fas fa-sun"></i>
+                            </a>
+                        </li>
+                        <form asp-action="Index" asp-controller="Search" style="margin-left: auto; margin-top: 10px">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="search" placeholder=@sharedResource["Search"] aria-describedby="basic-addon2">
+                                <button type="submit" class="input-group-text" id="basic-addon2"><i class="fas fa-search"></i></button>
+                            </div>
+                        </form>
+                        <li class="nav-item dropdown" style="margin-top: 10px">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @sharedResource["Language"]
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" asp-controller="language" asp-action="change" asp-route-culture="en-US">@sharedResource["English"]</a>
+                                <a class="dropdown-item" asp-controller="language" asp-action="change" asp-route-culture="fr-FR">@sharedResource["French"]</a>
+                            </div>
+                        </li>
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            <partial name="_Notifications" />
+            @RenderBody()
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

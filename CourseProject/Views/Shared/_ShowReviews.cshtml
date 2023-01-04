@@ -1,0 +1,52 @@
+﻿@using CourseProject_Utility;
+@using HtmlAgilityPack;
+@model Review
+@{
+    HtmlDocument htmlDoc = new HtmlDocument();
+    htmlDoc.LoadHtml(Model.Description);
+    string shortDesc = htmlDoc.DocumentNode.InnerText;
+    if (shortDesc.Length > 59)
+    {
+        shortDesc = shortDesc[0..60];
+    }
+}
+@{
+    string nameAuthor = Model!.Author!;
+    int index = nameAuthor.IndexOf(' ');
+    if (index > 0)
+    {
+        nameAuthor = nameAuthor[0..index];
+    }
+}
+@{
+    string nameObject = Model.NameObject!;
+    if (nameObject!.Length >= 24)
+    {
+        nameObject = nameObject[0..24] + "...";
+    }
+}
+
+<div class="col-lg-4 col-md-6 pb-4 filter @Model!.Category!.Name!.Replace(' ','_')">
+    <!-- Card-->
+    <div class="card rounded shadow-sm" style="border:1px solid #222">
+        <div class="card-body px-3 pt-3 pb-1 row">
+            <div class="col-7"><label class="float-left">@nameObject</label></div>
+            <div class="author col-5"><label class="float-right"><span class="h5">@nameAuthor</span></label></div>
+        </div>
+        <img class="card-img-top img-fluid d-block mb-3" src="@Model.ImageUrl" alt="Card image cap" style="height:310px">
+        <div class="card-body p-1 px-3 row">
+            <div class="col-6">
+                <span class="badge p-2 w-100 text-dark">@Model!.Category!.Name</span>
+            </div>
+            <div class="col-6 border-0">
+                <span class="badge p-2 w-100 text-dark" style="background-color:#c2cced">@Model!.Rating &#11088;</span>
+            </div>
+            <div class="col-12 pt-2" style="font-size:13px; text-align:justify">
+                <p>@shortDesc...</p>
+            </div>
+            <div class="col-12 p-1">
+                <a asp-action="Details" asp-controller="Home" asp-route-id="@Model.Id" class="btn btn-dark form-control btn-sm p-2" style="height:40px">@sharedResource["ViewDetails"]</a>
+            </div>
+        </div>
+    </div>
+</div>

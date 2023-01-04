@@ -1,0 +1,127 @@
+﻿@using CourseProject_Models.ViewModels;
+@using CourseProject_Utility;
+@model DetailsVM
+@{
+    double averageRating = 0;
+    double sum = 0;
+    double count = 0;
+    foreach (var composition in Model.Composition!)
+    {
+        sum += composition.Rating;
+        count++;
+    }
+    averageRating = sum / count;
+    averageRating = Math.Round(averageRating, 2);
+}
+
+<div class="">
+    <form method="post">
+        <input asp-for="@Model!.Review!.Id" hidden />
+        <div class="container backgroundWhite pt-4">
+            <div class="card" style="border:1px solid #000000;">
+                <div class="card-header bg-dark text-light ml-0 row container" style="border-radius: 0px;">
+                    <div class="col-12 col-md-6">
+                        <h1 class="text-white">@Model!.Review!.Title</h1>
+                    </div>
+                    <div class="col-12 col-md-6 text-md-right">
+                        <h1 class="text-warning" style="margin-left:60%">@Model.Review.Author</h1>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="container rounded p-2">
+                        <div class="row">
+                            <div class="col-12 col-lg-4 p-1 text-center">
+                                <img src="@Model.Review.ImageUrl" width="100%" class="rounded" />
+                            </div>
+                            <div class="col-12 col-lg-8">
+                                <div class="row pl-3">
+                                    <div class="col-12">
+                                        <span class="badge p-3 border text-dark" style="background-color:#f5d3e0">@Model!.Review!.Category!.Name</span>
+                                        <span class="badge p-3 border text-dark" style="background-color:#c2cced">Author's assessment: @Model.Review.Rating &#11088;</span>
+                                        <div class="rating rating_set" style="float: right">
+                                            <div class="rating_body">
+                                                <div class="rating_active"></div>
+                                                <div class="rating_items">
+                                                    <input type="radio" class="rating_item" value="1" name="rating" />
+                                                    <input type="radio" class="rating_item" value="2" name="rating" />
+                                                    <input type="radio" class="rating_item" value="3" name="rating" />
+                                                    <input type="radio" class="rating_item" value="4" name="rating" />
+                                                    <input type="radio" class="rating_item" value="5" name="rating" />
+                                                </div>
+                                            </div>
+                                            <div class="rating_value">
+                                                @averageRating.ToString().Replace(',', '.')
+                                            </div>
+                                        </div>
+                                        <h3 class="text-success"></h3>
+                                        <p class="text-secondary">@Html.Raw(Model.Review.Description)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-dark">
+                    <div class="row">
+                        <div class="col-12 col-md-6 pb-1 " style=" width: 215px">
+                            <a asp-action="Index" class="btn btn-success btn-square form-control btn-lg" style="height:50px;"><i class="fas fa-chevron-circle-left"></i></a>
+                        </div>
+                        <div class="col-12 col-md-6 " style=" width: 215px">
+                            @if (Model.Like)
+                            {
+                                <a asp-action="DeleteLike" asp-route-id="@Model.Review.Id" class="btn btn-warning btn-square form-control btn-lg" style="height:50px;"><i class="fas fa-heart-broken"></i></a>
+                            }
+                            else
+                            {
+                                <button type="submit" asp-action="SetLike" asp-route-id="@Model.Review.Id" class="btn btn-info form-control btn-lg" style="height:50px;"><i class="fab fa-gratipay"></i></button>
+                            }
+                        </div>
+                        @if ((User.IsInRole(WC.AdminRole) || User.IsInRole(WC.UserRole)))
+                        {
+                            @if (!Model.Rating)
+                            {
+                                <div class="btn-group" style=" height:50px;width: 215px">
+                                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </button>
+                                    <div class="dropdown dropdown-menu">
+                                        <li><a asp-action="SetRating" class="dropdown-item" asp-route-rating="1" asp-route-id="@Model.Review.Id">1</a></li>
+                                        <li><a asp-action="SetRating" class="dropdown-item" asp-route-rating="2" asp-route-id="@Model.Review.Id">2</a></li>
+                                        <li><a asp-action="SetRating" class="dropdown-item" asp-route-rating="3" asp-route-id="@Model.Review.Id">3</a></li>
+                                        <li><a asp-action="SetRating" class="dropdown-item" asp-route-rating="4" asp-route-id="@Model.Review.Id">4</a></li>
+                                        <li><a asp-action="SetRating" class="dropdown-item" asp-route-rating="5" asp-route-id="@Model.Review.Id">5</a></li>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-info form-control btn-lg" style="height:50px;width: 215px" disabled>@Model.UserRating <i class="fas fa-star"></i></button>
+                            }
+                        }                    
+                    </div>
+                </div>
+                
+                <ol class="list-group list-group-numbered" style="background: #FAFAD2">
+                    <div style="background: #d4d2c1"><strong>COMMENTS</strong></div>
+                    <div id="commentsContainer" />
+                </ol>
+            </div>
+        </div>
+    </form>
+    @if (User.IsInRole(WC.AdminRole) || User.IsInRole(WC.UserRole))
+    {
+        <form method="post" asp-route-id="@Model.Review.Id" asp-action="Create" asp-controller="Comment">
+            <div class="container backgroundWhite pt-4">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="input-group mb-3">
+                    <input name="text" type="text" class="form-control" placeholder=@sharedResource["LeaveComment"]>
+                    <input type="submit" class="btn btn-outline-warning" value=@sharedResource["Create"] />
+                </div>
+            </div>
+        </form>
+    }
+</div>
+@section Scripts{
+    <script src="~/js/comment.js"></script>
+}
+<script src="~/js/rating.js"></script>

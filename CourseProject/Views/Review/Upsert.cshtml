@@ -1,0 +1,232 @@
+﻿<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+@using CourseProject_Models.ViewModels;
+@using CourseProject_Utility;
+@model ReviewVM
+
+@{
+    var title = sharedResource["CreateReview"];
+    string currentTag = string.Empty;
+}
+
+<form method="post" enctype="multipart/form-data">
+    @if (Model!.Review!.Id != 0)
+    {
+        title = sharedResource["EditReview"];
+        <input asp-for="Review!.Id" hidden />
+    }
+
+    <div class="border p-3 bg-white">
+        <div class="form-group row">
+            <h2 class="text-info p1-3">@title</h2>
+        </div>
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Review!.Title"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Review!.Title" class="form-control" />
+                        <span asp-validation-for="Review!.Title" class="text-danger"></span>
+                    </div>
+                </div>
+                <br />
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Review!.Author"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Review!.Author" class="form-control" readonly />
+                        <span asp-validation-for="Review!.Author" class="text-danger"></span>
+                    </div>
+                </div>
+                <br />
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Review!.NameObject"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Review!.NameObject" class="form-control" />
+                        <span asp-validation-for="Review!.NameObject" class="text-danger"></span>
+                    </div>
+                </div>
+                <br />
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Review!.Description"></label>
+                    </div>
+                    <div class="col-8">
+                        <textarea asp-for="Review!.Description" class="form-control summernote"></textarea>
+                        <span asp-validation-for="Review!.Description" class="text-danger"></span>
+                    </div>
+                </div>
+                <br />
+                <div class="block-inputs">
+                    <div class="form-group row">
+                        <div class="col-4">
+                            <label asp-for="Review!.Tags" for="tags"></label>
+                        </div>
+                        <form name="" method="post" action="">
+                            <div class="col-8">
+                                <p>
+                                    <input asp-for="Review!.Tags" class="form-control" id="tags" />
+                                    <span asp-validation-for="Review!.Tags" class="text-danger"></span>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <br />
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Review!.CategoryId"></label>
+                    </div>
+                    <div class="col-8">
+                        <select asp-for="Review!.CategoryId" asp-items="@Model.CategorySelectList" class="form-select">
+                            <option disabled selected>--@sharedResource["SelectCategory"]--</option>
+                        </select>
+                        <span asp-validation-for="Review!.CategoryId" class="text-danger"></span>
+                    </div>
+                </div>
+                <br />
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Review!.ImageUrl"></label>
+                    </div>
+                    <div class="col-8 upload-container">
+                        <input type="file" name="files" id="uploadBox file_upload" multiple class="form-select" />
+                    </div>
+                </div>
+                <br />
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Review!.Rating"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Review!.Rating" class="form-control" />
+                        <span asp-validation-for="Review!.Rating" class="text-danger"></span>
+                    </div>
+                </div>
+                <br />
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="Review!.DatePublication"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="Review!.DatePublication" class="form-control" type="date" id="date" readonly/>
+                        <span asp-validation-for="Review!.DatePublication" class="text-danger"></span>
+                    </div>
+                </div>
+                <br />
+                <div class="form-group row">
+                    <div class="col-8 offset-4 row">
+                        <div class="col">
+                            @if (Model.Review.Id != 0)
+                            {
+                                <input type="submit" class="btn btn-info w-100" value=@sharedResource["Update"] />
+                            }
+                            else
+                            {
+                                <input type="submit" onclick="return validateInput()" class="btn btn-primary w-100" value=@sharedResource["Create"] />
+                            }
+                        </div>
+                        <div class="col">
+                            <a asp-action="Index" class="btn btn-success w-100"><i class="fas fa-sign-out-alt"></i>@sharedResource["Back"]</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+
+                @if (Model.Review.Id != 0)
+                {
+                    <img src="@Model.Review.ImageUrl" width="100%" style="border-radius:5px; border:1px solid #bbb" />
+                }
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    <script>
+        $(document).ready(function () {
+            $('.summernote').summernote({
+                height: 250
+            });
+        });
+        function validateInput() {
+            if (document.getElementById("uploadBox").value == "") {
+                Swal.fire(
+                    'Error!',
+                    'Please upload an Image!',
+                    'error'
+                )
+                return false;
+            }
+            return true;
+        }
+
+        var a = document.getElementById('tags');
+        function onlyUnique(value, index, self) {
+            return self.indexOf(value) === index;
+        }
+        function appendTag(newTag) {
+            if (!newTag) return;
+            let index = a.value.lastIndexOf('#');
+            let result = a.value.substr(0, index) + newTag;
+            let parts = result.split(' ').filter(onlyUnique);
+            a.value = parts.join(' ');
+        }
+
+        $(function () {
+            var availableTags = jQuery.get('/review/GetTagList', function (data) {
+                var $ac = $("#tags").autocomplete({
+                    source: data,
+                    minLength: 0,
+                    select: function (event, ui) {
+                        appendTag(ui.item.value);
+                        event.preventDefault();
+                    },
+                    change: function (event, ui) { event.preventDefault(); },
+                    focus: function (event, ui) { event.preventDefault(); }
+                });
+            });
+        });
+        a.addEventListener('keyup', addthis);
+        function addthis() {
+            if (a.value.endsWith(' ')) {
+                a.value = a.value + '#';
+            }
+            if (!a.value.startsWith('#')) {
+                a.value = '#' + a.value;
+            }
+            a.value = a.value.replace('  ', ' ');
+            a.value = a.value.replace('##', '#');
+            a.value = a.value.replace('# ', '#');
+            a.value = a.value.replace('# #', '#');
+            let index = a.value.lastIndexOf('#');
+            let search = a.value.substr(index);
+            $("#tags").autocomplete("search", search);
+        }
+        function uploadFiles() {
+            var files = document.getElementById('file_upload').files;
+            if (files.length == 0) {
+                alert("Please first choose or drop any file(s)...");
+                return;
+            }
+            var filenames = "";
+            for (var i = 0; i < files.length; i++) {
+                filenames += files[i].name + "\n";
+            }
+            alert("Selected file(s) :\n____________________\n" + filenames);
+        }
+        var date = document.getElementById('date');
+var dateObj = new Date();
+date.value = dateObj.toISOString().slice(0,10);
+    </script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+}
