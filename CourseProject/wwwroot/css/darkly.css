@@ -491,7 +491,7 @@ body {
     background-color: #29242b;
 }
 
-.card {
+.card-review {
     background-color: #c4c4c4;
 }
 
@@ -499,7 +499,7 @@ body {
     color: #fbf84c;
 }
 
-.btn {
+.btn-view {
     background-color: #000000;
     border-color: #fff900;
 }

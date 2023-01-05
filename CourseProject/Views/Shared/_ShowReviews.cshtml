@@ -28,7 +28,7 @@
 
 <div class="col-lg-4 col-md-6 pb-4 filter @Model!.Category!.Name!.Replace(' ','_')">
     <!-- Card-->
-    <div class="card rounded shadow-sm" style="border:1px solid #222">
+    <div class="card-review rounded shadow-sm" style="border:1px solid #222">
         <div class="card-body px-3 pt-3 pb-1 row">
             <div class="col-7"><label class="float-left">@nameObject</label></div>
             <div class="author col-5"><label class="float-right"><span class="h5">@nameAuthor</span></label></div>
@@ -45,7 +45,7 @@
                 <p>@shortDesc...</p>
             </div>
             <div class="col-12 p-1">
-                <a asp-action="Details" asp-controller="Home" asp-route-id="@Model.Id" class="btn btn-dark form-control btn-sm p-2" style="height:40px">@sharedResource["ViewDetails"]</a>
+                <a asp-action="Details" asp-controller="Home" asp-route-id="@Model.Id" class="btn-view btn btn-dark form-control btn-sm p-2" style="height:40px">@sharedResource["ViewDetails"]</a>
             </div>
         </div>
     </div>
