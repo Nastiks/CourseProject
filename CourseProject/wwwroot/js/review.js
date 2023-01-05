@@ -4,6 +4,25 @@ $(document).ready(function () {
     loadDataTable()
 });
 
+function convertToPlain(html) {
+    let tempDivElement = document.createElement("div");
+    tempDivElement.innerHTML = html;
+    return tempDivElement.textContent || tempDivElement.innerText || "";
+}
+
+function trimText(text, len) {
+    let plainText = convertToPlain(text);
+    if (plainText.len <= len) {
+        return plainText;
+    }
+    let trimmed = plainText.substr(0, len);
+    let index = trimmed.lastIndexOf(' ');
+    if (index > 0) {
+        trimmed = trimmed.substr(0, index);
+    }
+    return trimmed + '...';
+}
+
 function loadDataTable(url) {
     dataTable = $("#tableData").DataTable({
         "ajax": {
@@ -14,7 +33,12 @@ function loadDataTable(url) {
             { "data": "author", "width": "10%" },
             { "data": "nameObject", "width": "15%" },
             { "data": "datePublication", "width": "10%" },
-            { "data": "description", "width": "20%" },
+            {
+                "data": "description", "width": "20%",
+                "render": function (data) {
+                    return trimText(data, 45);
+                }
+            },
             { "data": "rating", "width": "10%" },
             {
                 "data": "id",
