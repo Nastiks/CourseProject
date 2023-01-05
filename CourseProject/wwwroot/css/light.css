@@ -24,6 +24,24 @@ html {
     font-size: 14px;
 }
 
+@media (max-width: 576px) {
+    .navbar-collapse {
+        text-align: center;
+        display: flex !important;
+    }
+
+    .search-box {
+        margin-left: 0px;
+    }
+}
+
+@media (min-width: 576px) {
+    .search-box {
+        margin-left: auto;
+    }
+}
+
+
 @media (min-width: 768px) {
     html {
         font-size: 16px;
