@@ -54,7 +54,9 @@
                                             </div>
                                         </div>
                                         <h3 class="text-success"></h3>
-                                        <p class="text-secondary">@Html.Raw(Model.Review.Description)</p>
+                                        <p><strong>Title of the work: @Model.Review.NameObject</strong></p>
+                                        <p class="text-secondary">@Html.Raw(Model.Review.Description)</p><br />
+                                        <p><strong>Tags: @Model.Review.Tags</strong></p>
                                     </div>
                                 </div>
                             </div>
@@ -66,16 +68,19 @@
                         <div class="col-12 col-md-6 pb-1 " style=" width: 215px">
                             <a asp-action="Index" class="btn btn-success btn-square form-control btn-lg" style="height:50px;"><i class="fas fa-chevron-circle-left"></i></a>
                         </div>
-                        <div class="col-12 col-md-6 " style=" width: 215px">
-                            @if (Model.Like)
-                            {
-                                <a asp-action="DeleteLike" asp-route-id="@Model.Review.Id" class="btn btn-warning btn-square form-control btn-lg" style="height:50px;"><i class="fas fa-heart-broken"></i></a>
-                            }
-                            else
-                            {
-                                <button type="submit" asp-action="SetLike" asp-route-id="@Model.Review.Id" class="btn btn-info form-control btn-lg" style="height:50px;"><i class="fab fa-gratipay"></i></button>
-                            }
-                        </div>
+                        @if (User.IsInRole(WC.AdminRole) || User.IsInRole(WC.UserRole))
+                        {
+                            <div class="col-12 col-md-6 " style=" width: 215px">
+                                @if (Model.Like)
+                                {
+                                    <a asp-action="DeleteLike" asp-route-id="@Model.Review.Id" class="btn btn-warning btn-square form-control btn-lg" style="height:50px;"><i class="fas fa-heart-broken"></i></a>
+                                }
+                                else
+                                {
+                                    <button type="submit" asp-action="SetLike" asp-route-id="@Model.Review.Id" class="btn btn-info form-control btn-lg" style="height:50px;"><i class="fab fa-gratipay"></i></button>
+                                }
+                            </div>
+                        }                        
                         @if ((User.IsInRole(WC.AdminRole) || User.IsInRole(WC.UserRole)))
                         {
                             @if (!Model.Rating)
