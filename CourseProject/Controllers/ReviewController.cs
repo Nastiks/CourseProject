@@ -81,7 +81,7 @@ namespace CourseProject.Controllers
                 var files = HttpContext.Request.Form.Files;
                 string webRootPath = _webHostEnvironment.WebRootPath;
 
-                if (reviewVM.Review!.Id == 0)
+                if (reviewVM.Review!.Id == 0 && files.Count != 0)
                 {
                     string upload = webRootPath + WC.ImagePath;
                     string extension = Path.GetExtension(files[0].FileName);
@@ -128,7 +128,14 @@ namespace CourseProject.Controllers
                     }
                     else
                     {
-                        reviewVM.Review.ImageUrl = objFromDb!.ImageUrl;
+                        if (objFromDb.ImageUrl != null)
+                        {
+                            reviewVM.Review.ImageUrl = objFromDb!.ImageUrl;
+                        }                        
+                    }
+                    if (reviewVM.Review.ImageUrl == null)
+                    {
+                        reviewVM.Review.ImageUrl = @"https://res.cloudinary.com/drazkgyna/image/upload/v1673101626/Review_u8axur.jpg";
                     }
                     _revRepo.Update(reviewVM.Review);
                 }
