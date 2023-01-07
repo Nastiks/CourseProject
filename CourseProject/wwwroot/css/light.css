@@ -27,7 +27,6 @@ html {
 @media (max-width: 576px) {
     .navbar-collapse {
         text-align: center;
-        display: flex !important;
     }
 
     .search-box {

@@ -189,19 +189,38 @@ namespace CourseProject.Controllers
 
         public IActionResult SetLike(int id)
         {
-            int count = _likeRepo!.GetAll().Max(x => x.Id);
-            if (User.Identity!.Name != null)
+            if (_likeRepo.GetAll().Count() > 0)
             {
-                ApplicationUser user = _userRepo!.FirstOrDefault(u => u.UserName == User.Identity!.Name);
-                Like like = new Like()
+                int count = _likeRepo!.GetAll().Max(x => x.Id);
+                if (User.Identity!.Name != null)
                 {
-                    Id = ++count,
-                    ReviewId = id,
-                    UserId = user.Id
-                };
-                _likeRepo.Add(like);
-                _likeRepo.Save();
+                    ApplicationUser user = _userRepo!.FirstOrDefault(u => u.UserName == User.Identity!.Name);
+                    Like like = new Like()
+                    {
+                        Id = ++count,
+                        ReviewId = id,
+                        UserId = user.Id
+                    };
+                    _likeRepo.Add(like);
+                    _likeRepo.Save();
+                }
             }
+            else
+            {
+                if (User.Identity!.Name != null)
+                {
+                    ApplicationUser user = _userRepo!.FirstOrDefault(u => u.UserName == User.Identity!.Name);
+                    Like like = new Like()
+                    {
+                        Id = 1,
+                        ReviewId = id,
+                        UserId = user.Id
+                    };
+                    _likeRepo.Add(like);
+                    _likeRepo.Save();
+                }
+            }
+            
             return RedirectToAction(nameof(Details), new { id });
         }
 
