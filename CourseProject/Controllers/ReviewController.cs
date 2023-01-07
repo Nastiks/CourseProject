@@ -128,7 +128,7 @@ namespace CourseProject.Controllers
                     }
                     else
                     {
-                        if (objFromDb.ImageUrl != null)
+                        if (objFromDb != null)
                         {
                             reviewVM.Review.ImageUrl = objFromDb!.ImageUrl;
                         }                        

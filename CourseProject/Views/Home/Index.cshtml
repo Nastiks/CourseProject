@@ -54,14 +54,17 @@
 
                 var value = $(this).attr('data-filter');
                 if (value == "all") {
+                    $('.tags').show('1000');
                     $('.filter').show('1000');
                 }
                 else {
+                    $('.tags').hide('1000');
                     $(".filter").not('.' + value).hide('3000');
                     $('.filter').filter('.' + value).show('3000');
                 }
             });
 
         });
+
     </script>
 }
