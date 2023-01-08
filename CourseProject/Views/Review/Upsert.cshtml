@@ -27,8 +27,7 @@
                         <label asp-for="Review!.Title"></label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="Review!.Title" class="form-control" />
-                        <span asp-validation-for="Review!.Title" class="text-danger"></span>
+                        <input asp-for="Review!.Title" class="form-control" id="uploadBox" />
                     </div>
                 </div>
                 <br />
@@ -47,8 +46,7 @@
                         <label asp-for="Review!.NameObject"></label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="Review!.NameObject" class="form-control" />
-                        <span asp-validation-for="Review!.NameObject" class="text-danger"></span>
+                        <input asp-for="Review!.NameObject" class="form-control" id="uploadBox" />
                     </div>
                 </div>
                 <br />
@@ -70,7 +68,7 @@
                         <form name="" method="post" action="">
                             <div class="col-8">
                                 <p>
-                                    <input asp-for="Review!.Tags" class="form-control" id="tags" />
+                                    <input asp-for="Review!.Tags" class="form-control" id="tags"/>
                                     <span asp-validation-for="Review!.Tags" class="text-danger"></span>
                                 </p>
                             </div>
@@ -95,7 +93,7 @@
                         <label asp-for="Review!.ImageUrl"></label>
                     </div>
                     <div class="col-8 upload-container">
-                        <input type="file" name="files" id="uploadBox file_upload" multiple class="form-select" />
+                        <input type="file" name="files" id="file_upload" multiple class="form-select" />
                     </div>
                 </div>
                 <br />
@@ -104,7 +102,7 @@
                         <label asp-for="Review!.Rating"></label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="Review!.Rating" class="form-control" />
+                        <input asp-for="Review!.Rating" class="form-control"/>
                         <span asp-validation-for="Review!.Rating" class="text-danger"></span>
                     </div>
                 </div>
@@ -162,7 +160,7 @@
             if (document.getElementById("uploadBox").value == "") {
                 Swal.fire(
                     'Error!',
-                    'Please upload an Image!',
+                    'Please fill in all fields!',
                     'error'
                 )
                 return false;
