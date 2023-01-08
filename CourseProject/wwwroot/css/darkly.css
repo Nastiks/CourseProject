@@ -507,3 +507,37 @@ body {
     background-color: #cbb9ce;
     border-color: #cbb9ce;
 }
+
+.back-btn {
+    background-color: #907a7a;
+    border-color: #907a7a;
+    color: white;
+}
+
+.dislike-btn {
+    background-color: #fff900;
+    border-color: #fff900;
+    color: white;
+}
+
+.like-btn {
+    background-color: #c41818;
+    border-color: #c41818;
+    color: white;
+}
+
+.rating-btn {
+    background-color: #7634a4;
+    border-color: #7634a4;
+    color: white;
+}
+
+.rating-box {
+    background-color: #076b3a;
+    border-color: #076b3a;
+    color: white;
+}
+
+.profile {
+    color: white;
+}
