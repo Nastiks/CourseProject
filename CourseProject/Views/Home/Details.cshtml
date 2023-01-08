@@ -66,18 +66,18 @@
                 <div class="card-footer bg-dark">
                     <div class="row">
                         <div class="col-12 col-md-6 pb-1" style=" width: 415px">
-                            <a asp-action="Index" class="btn btn-success btn-square form-control btn-lg" style="height:50px;"><i class="fas fa-chevron-circle-left"></i></a>
+                            <a asp-action="Index" class="back-btn btn btn-square form-control btn-lg" style="height:50px;"><i class="fas fa-chevron-circle-left"></i></a>
                         </div>
                         @if (User.IsInRole(WC.AdminRole) || User.IsInRole(WC.UserRole))
                         {
-                            <div class="col-12 col-md-6" style=" width: 415px">
+                            <div class="col-12 col-md-6 pb-1" style=" width: 415px">
                                 @if (Model.Like)
                                 {
-                                    <a asp-action="DeleteLike" asp-route-id="@Model.Review.Id" class="btn btn-warning btn-square form-control btn-lg" style="height:50px;"><i class="fas fa-heart-broken"></i></a>
+                                    <a asp-action="DeleteLike" asp-route-id="@Model.Review.Id" class="dislike-btn btn btn-square form-control btn-lg" style="height:50px;"><i class="fas fa-heart-broken"></i></a>
                                 }
                                 else
                                 {
-                                    <a asp-action="SetLike" asp-route-id="@Model.Review.Id" class="btn btn-info form-control btn-lg" style="height:50px;"><i class="fab fa-gratipay"></i></a>
+                                    <a asp-action="SetLike" asp-route-id="@Model.Review.Id" class="like-btn btn form-control btn-lg" style="height:50px;"><i class="fab fa-gratipay"></i></a>
                                 }
                             </div>
                         }                        
@@ -86,7 +86,7 @@
                             @if (!Model.Rating)
                             {
                                 <div class="btn-group" style=" height:50px;width: 415px">
-                                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                    <button type="button" class="rating-btn btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                         <i class="fas fa-star-half-alt"></i>
                                     </button>
                                     <div class="dropdown dropdown-menu">
@@ -100,7 +100,9 @@
                             }
                             else
                             {
-                                <button type="submit" class="btn btn-info form-control btn-lg" style="height:50px;width: 415px" disabled>@Model.UserRating <i class="fas fa-star"></i></button>
+                                <div class="col-12 col-md-6" style=" width: 415px">
+                                    <a class="rating-box btn form-control btn-lg" style="height:50px;">@Model.UserRating <i class="fas fa-star"></i></a>                                    
+                                </div>
                             }
                         }                    
                     </div>

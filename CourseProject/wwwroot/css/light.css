@@ -35,6 +35,9 @@ html {
 }
 
 @media (min-width: 576px) {
+    .navbar-collapse {
+        text-align: center;
+    }
     .search-box {
         margin-left: auto;
     }
@@ -42,9 +45,12 @@ html {
 
 
 @media (min-width: 768px) {
+    .navbar-collapse {
+        text-align: center;
+    }
     html {
         font-size: 16px;
-    }
+    }    
 }
 
 .border-top {
@@ -508,4 +514,38 @@ body {
 .badge {
     background-color: #f2b6dc;
     border-color: #f2b6dc;
+}
+
+.back-btn {
+    background-color: #edcdcd;
+    border-color: #edcdcd;
+    color: white;
+}
+
+.dislike-btn {
+    background-color: #fff900;
+    border-color: #fff900;
+    color: white;
+}
+
+.like-btn {
+    background-color: #fae049;
+    border-color: #fae049;
+    color: white;
+}
+
+.rating-btn {
+    background-color: #ce79de;
+    border-color: #ce79de;
+    color: white;
+}
+
+.rating-box {
+    background-color: #ade9cb;
+    border-color: #ade9cb;
+    color: white;
+}
+
+.profile {
+    color: black;
 }
