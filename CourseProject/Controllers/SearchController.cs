@@ -3,10 +3,6 @@ using CourseProject_Models;
 using CourseProject_Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Drawing.Text;
-using System.Linq;
-using static Humanizer.On;
 
 namespace CourseProject.Controllers
 {
@@ -34,7 +30,6 @@ namespace CourseProject.Controllers
                                             || EF.Functions.Like(r.Description!.ToLower(), search)
                                             || EF.Functions.Like(r.NameObject!.ToLower(), search), includeProperties: "Category")
             };
-
             var found = SearchReviewByComment(search);
             searchVM.Reviews = searchVM.Reviews.Concat(found).DistinctBy(x => x.Id);
             return View(searchVM.Reviews);
@@ -43,8 +38,7 @@ namespace CourseProject.Controllers
         private IEnumerable<Review> SearchReviewByComment(string query)
         {
             IEnumerable<Comment> comments = _comRepo!.GetAll(c => EF.Functions.Like(c.Text!.ToLower(), query));
-            List<Review> reviews = new List<Review>();
-            
+            List<Review> reviews = new();            
             foreach (var comment in comments)
             {
                 Review foundReview = _revRepo.FirstOrDefault(r => r.Id == comment.ReviewId, includeProperties: "Category");

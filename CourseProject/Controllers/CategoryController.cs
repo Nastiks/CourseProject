@@ -1,5 +1,4 @@
-﻿using CourseProject_DataAccess;
-using CourseProject_DataAccess.Repository.IRepository;
+﻿using CourseProject_DataAccess.Repository.IRepository;
 using CourseProject_Models;
 using CourseProject_Utility;
 using Microsoft.AspNetCore.Authorization;

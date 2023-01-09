@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CourseProject.Controllers
 {
-    [Route("languages")]
     public class LanguageController : Controller
     {
-        [Route("change")]
         public IActionResult Change(string culture)
         {
             Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName,

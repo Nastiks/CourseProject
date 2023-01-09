@@ -68,7 +68,7 @@
                         <form name="" method="post" action="">
                             <div class="col-8">
                                 <p>
-                                    <input asp-for="Review!.Tags" class="form-control" id="tags"/>
+                                    <input asp-for="Review!.Tags" class="form-control" id="tags" />
                                     <span asp-validation-for="Review!.Tags" class="text-danger"></span>
                                 </p>
                             </div>
@@ -102,7 +102,7 @@
                         <label asp-for="Review!.Rating"></label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="Review!.Rating" class="form-control"/>
+                        <input asp-for="Review!.Rating" class="form-control" />
                         <span asp-validation-for="Review!.Rating" class="text-danger"></span>
                     </div>
                 </div>
@@ -112,7 +112,7 @@
                         <label asp-for="Review!.DatePublication"></label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="Review!.DatePublication" class="form-control" type="date" id="date" readonly/>
+                        <input asp-for="Review!.DatePublication" class="form-control" type="date" id="date" readonly />
                         <span asp-validation-for="Review!.DatePublication" class="text-danger"></span>
                     </div>
                 </div>
@@ -223,8 +223,8 @@
             alert("Selected file(s) :\n____________________\n" + filenames);
         }
         var date = document.getElementById('date');
-var dateObj = new Date();
-date.value = dateObj.toISOString().slice(0,10);
+        var dateObj = new Date();
+        date.value = dateObj.toISOString().slice(0, 10);
     </script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 }

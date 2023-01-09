@@ -23,7 +23,7 @@
     <div class="tags">
         @foreach (var review in Model.Reviews!)
         {
-            string[] tags = review.Tags.Split(' ');
+            string[] tags = review.Tags!.Split(' ');
             foreach (var item in tags)
             {
                 if (!tagAll.Contains(item))

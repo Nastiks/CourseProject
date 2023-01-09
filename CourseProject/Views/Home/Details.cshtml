@@ -80,7 +80,7 @@
                                     <a asp-action="SetLike" asp-route-id="@Model.Review.Id" class="like-btn btn form-control btn-lg" style="height:50px;"><i class="fab fa-gratipay"></i></a>
                                 }
                             </div>
-                        }                        
+                        }
                         @if ((User.IsInRole(WC.AdminRole) || User.IsInRole(WC.UserRole)))
                         {
                             @if (!Model.Rating)
@@ -101,13 +101,13 @@
                             else
                             {
                                 <div class="col-12 col-md-6" style=" width: 415px">
-                                    <a class="rating-box btn form-control btn-lg" style="height:50px;">@Model.UserRating <i class="fas fa-star"></i></a>                                    
+                                    <a class="rating-box btn form-control btn-lg" style="height:50px;">@Model.UserRating <i class="fas fa-star"></i></a>
                                 </div>
                             }
-                        }                    
+                        }
                     </div>
                 </div>
-                
+
                 <ol class="list-group list-group-numbered" style="background: #FAFAD2">
                     <div style="background: #d4d2c1"><strong>COMMENTS</strong></div>
                     <div id="commentsContainer" />
@@ -130,5 +130,5 @@
 </div>
 @section Scripts{
     <script src="~/js/comment.js"></script>
+    <script src="~/js/rating.js"></script>
 }
-<script src="~/js/rating.js"></script>

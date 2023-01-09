@@ -1,11 +1,9 @@
-﻿using CourseProject_DataAccess;
-using CourseProject_DataAccess.Repository.IRepository;
+﻿using CourseProject_DataAccess.Repository.IRepository;
 using CourseProject_Models;
 using CourseProject_Models.ViewModels;
 using CourseProject_Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace CourseProject.Controllers
@@ -63,9 +61,9 @@ namespace CourseProject.Controllers
         {
             DetailsVM detailsVM = new()
             {
-                Review = _revRepo.FirstOrDefault(u => u.Id == id, includeProperties: "Category"),
+                Review = _revRepo.FirstOrDefault(r => r.Id == id, includeProperties: "Category"),
                 Like = HasLike(id),
-                Comment = _comRepo!.GetAll(u => u.ReviewId == id),
+                Comment = _comRepo!.GetAll(c => c.ReviewId == id),
                 Composition = _composRepo!.GetAll(c => c.ReviewId == id),
                 Rating = HasRating(id),
                 UserRating = GetRating(id),
@@ -80,7 +78,7 @@ namespace CourseProject.Controllers
         {
             List<Like> likes = new();
             if (HttpContext.Session.Get<IEnumerable<Like>>(WC.SessionLike) != null
-                && HttpContext.Session.Get<IEnumerable<Like>>(WC.SessionLike)!.Count() > 0)
+                && HttpContext.Session.Get<IEnumerable<Like>>(WC.SessionLike)!.Any())
             {
                 likes = HttpContext.Session.Get<List<Like>>(WC.SessionLike)!;
             }
@@ -116,7 +114,7 @@ namespace CourseProject.Controllers
             }
             string name = _revRepo.FirstOrDefault(x => x.Id == id).Title!;
             string userId = _userRepo!.FirstOrDefault(u => u.UserName == User.Identity!.Name).Id;
-            Composition composition = new Composition()
+            Composition composition = new()
             {
                 Id = ++count,
                 Name = name,
@@ -189,44 +187,29 @@ namespace CourseProject.Controllers
 
         public IActionResult SetLike(int id)
         {
-            if (_likeRepo.GetAll().Count() > 0)
+            int count = 0;
+            if (_likeRepo!.GetAll().Any())
             {
-                int count = _likeRepo!.GetAll().Max(x => x.Id);
-                if (User.Identity!.Name != null)
-                {
-                    ApplicationUser user = _userRepo!.FirstOrDefault(u => u.UserName == User.Identity!.Name);
-                    Like like = new Like()
-                    {
-                        Id = ++count,
-                        ReviewId = id,
-                        UserId = user.Id
-                    };
-                    _likeRepo.Add(like);
-                    _likeRepo.Save();
-                }
+                count = _likeRepo!.GetAll().Max(x => x.Id);
             }
-            else
+            if (User.Identity!.Name != null)
             {
-                if (User.Identity!.Name != null)
+                ApplicationUser user = _userRepo!.FirstOrDefault(u => u.UserName == User.Identity!.Name);
+                Like like = new()
                 {
-                    ApplicationUser user = _userRepo!.FirstOrDefault(u => u.UserName == User.Identity!.Name);
-                    Like like = new Like()
-                    {
-                        Id = 1,
-                        ReviewId = id,
-                        UserId = user.Id
-                    };
-                    _likeRepo.Add(like);
-                    _likeRepo.Save();
-                }
+                    Id = ++count,
+                    ReviewId = id,
+                    UserId = user.Id
+                };
+                _likeRepo.Add(like);
+                _likeRepo.Save();
             }
-            
             return RedirectToAction(nameof(Details), new { id });
         }
 
         public Dictionary<string, int> GetLikes()
         {
-            Dictionary<string, int> likes = new Dictionary<string, int>();
+            Dictionary<string, int> likes = new();
             IEnumerable<ApplicationUser> users = _userRepo!.GetAll();
 
             foreach (var user in users)
@@ -246,7 +229,6 @@ namespace CourseProject.Controllers
             return likes;
         }
 
-        #region
         [HttpGet]
         public IActionResult GetComments(int id)
         {
@@ -257,11 +239,10 @@ namespace CourseProject.Controllers
                     string author = x.Author;
                     string text = x.Text;
                     int likes = allLikes[author];
-                    return new {author, text, likes};
+                    return new { author, text, likes };
                 });
 
             return Json(new { data = comments });
         }
-        #endregion
     }
 }

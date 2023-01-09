@@ -2,18 +2,13 @@ using CourseProject_DataAccess;
 using CourseProject_DataAccess.Repository;
 using CourseProject_DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Localization;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.EntityFrameworkCore;
-using CloudinaryDotNet.Actions;
-using CloudinaryDotNet;
 using Npgsql;
 using System.Globalization;
-using System.Security.Cryptography.X509Certificates;
-using CourseProject_Utility;
 using System.Reflection;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Localization;
+using CourseProject_Utility;
 
 namespace CourseProject
 {
@@ -49,14 +44,14 @@ namespace CourseProject
 
             builder.Services.AddAuthentication().AddFacebook(Options =>
             {
-                Options.AppId = "3295360184015573";
-                Options.AppSecret = "27410a25aedc707e0fd07704b5a1a3aa";
+                Options.AppId = WC.AppId;
+                Options.AppSecret = WC.AppSecret;
             });
 
             builder.Services.AddAuthentication().AddGoogle(Options =>
             {
-                Options.ClientId = "607176074381-pi3vqr95dpmkk7n2inlgojasn1gef2ai.apps.googleusercontent.com";
-                Options.ClientSecret = "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";
+                Options.ClientId = WC.ClientId;
+                Options.ClientSecret = WC.ClientSecret;
             });
 
             builder.Services.AddControllersWithViews()
@@ -64,7 +59,7 @@ namespace CourseProject
                             {
                                 var type = typeof(SharedResource);
                                 var assemblyName = new AssemblyName(type.GetTypeInfo().Assembly.FullName!);
-                                var factory = builder.Services.BuildServiceProvider().GetService<IStringLocalizerFactory>();
+                                var factory = builder.Services.BuildServiceProvider()!.GetService<IStringLocalizerFactory>();
                                 var localizer = factory!.Create("SharedResource", assemblyName!.Name!);
                                 option.DataAnnotationLocalizerProvider = (t, f) => localizer;
                             });

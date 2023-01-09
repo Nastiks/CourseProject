@@ -47,7 +47,7 @@ namespace CourseProject.Controllers
             {
                 ApplicationUser = _userRepo!.FirstOrDefault(u => u.Id == id)
             };
-            Review review = new Review()
+            Review review = new()
             {
                 Author = UserVM.ApplicationUser.FullName
             };
@@ -71,7 +71,7 @@ namespace CourseProject.Controllers
         [HttpGet]
         public IActionResult GetUserList()
         {
-            return Json(new {data = _userRepo.GetAll()});
+            return Json(new {data = _userRepo!.GetAll()});
         }
         #endregion
     }

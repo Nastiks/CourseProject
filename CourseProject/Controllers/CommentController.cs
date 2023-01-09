@@ -10,12 +10,10 @@ namespace CourseProject.Controllers
     public class CommentController : Controller
     {
         private readonly ICommentRepository? _comRepo;
-        private readonly IReviewRepository _revRepo;
         private readonly IApplicationUserRepository _userRepo;
-        public CommentController(ICommentRepository? comRepo, IReviewRepository revRepo, IApplicationUserRepository userRepo)
+        public CommentController(ICommentRepository? comRepo, IApplicationUserRepository userRepo)
         {
             _comRepo = comRepo;
-            _revRepo = revRepo;
             _userRepo = userRepo;
         }
 
@@ -23,11 +21,13 @@ namespace CourseProject.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(string text, int id)
         {
-            Comment comment = new Comment();
-            comment.Text = text;
-            comment.ReviewId = id;
-            comment.Author = _userRepo.FirstOrDefault(u => u.UserName == User.Identity!.Name).FullName!;
-            comment.Date = DateTime.Now;
+            Comment comment = new()
+            {
+                Text = text,
+                ReviewId = id,
+                Author = _userRepo.FirstOrDefault(u => u.UserName == User.Identity!.Name).FullName!,
+                Date = DateTime.Now
+            };
             _comRepo!.Add(comment);
             _comRepo.Save();
             TempData[WC.Success] = "Comment created successfully";

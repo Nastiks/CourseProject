@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CourseProject_Models
 {
@@ -17,6 +12,6 @@ namespace CourseProject_Models
         [Required]
         public int Rating { get; set; }
         [Required]
-        public string? UserId { get; set; } 
+        public string? UserId { get; set; }
     }
 }

@@ -1,16 +1,11 @@
 ﻿using CloudinaryDotNet.Actions;
 using CloudinaryDotNet;
-using CourseProject_DataAccess;
 using CourseProject_DataAccess.Repository.IRepository;
 using CourseProject_Models;
 using CourseProject_Models.ViewModels;
 using CourseProject_Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace CourseProject.Controllers
 {
@@ -32,13 +27,12 @@ namespace CourseProject.Controllers
         public IActionResult Index()
         {
             IEnumerable<Review> objList = _revRepo.GetAll(includeProperties: "Category");
-
             return View(objList);
         }
 
         public IActionResult Upsert(int? id, string? author)
         {
-            ReviewVM reviewVM = new ReviewVM()
+            ReviewVM reviewVM = new()
             {
                 Review = new Review()
                 {
@@ -47,15 +41,8 @@ namespace CourseProject.Controllers
                 CategorySelectList = _revRepo.GetAllDropdownList(WC.CategoryName)
             };
 
-            if (author == null)
-            {
-                reviewVM.Review!.Author = _userRepo.FirstOrDefault(u => u.UserName == User.Identity!.Name).FullName;
-            }
-            else
-            {
-                reviewVM.Review!.Author = author;
-            }
-
+            reviewVM.Review!.Author = author ?? _userRepo.FirstOrDefault(u => u.UserName == User.Identity!.Name).FullName;
+            
             if (id == null)
             {
                 return View(reviewVM);
@@ -87,8 +74,8 @@ namespace CourseProject.Controllers
                     string extension = Path.GetExtension(files[0].FileName);
                     string fileName = Guid.NewGuid().ToString() + extension;
 
-                    Account account = new Account(WC.CloudName, WC.ApiKey, WC.ApiSecret);
-                    Cloudinary cloudinary = new Cloudinary(account);
+                    Account account = new(WC.CloudName, WC.ApiKey, WC.ApiSecret);
+                    Cloudinary cloudinary = new(account);
                     MemoryStream memoryStream = new();
                     files[0].CopyTo(memoryStream);
                     memoryStream.Seek(0, SeekOrigin.Begin);
@@ -113,8 +100,8 @@ namespace CourseProject.Controllers
                         string extension = Path.GetExtension(files[0].FileName);
                         string fileName = Guid.NewGuid().ToString() + extension;
 
-                        Account account = new Account(WC.CloudName, WC.ApiKey, WC.ApiSecret);
-                        Cloudinary cloudinary = new Cloudinary(account);
+                        Account account = new(WC.CloudName, WC.ApiKey, WC.ApiSecret);
+                        Cloudinary cloudinary = new(account);
                         MemoryStream memoryStream = new();
                         files[0].CopyTo(memoryStream);
                         memoryStream.Seek(0, SeekOrigin.Begin);
@@ -188,8 +175,10 @@ namespace CourseProject.Controllers
 
         public void AddTag(string tag, int id)
         {
-            ReviewVM reviewVM = new ReviewVM();
-            reviewVM.Review = _revRepo.FirstOrDefault(r => r.Id == id);
+            ReviewVM reviewVM = new()
+            {
+                Review = _revRepo.FirstOrDefault(r => r.Id == id)
+            };
             reviewVM.Review.Tags += " " + tag;
         }
 
@@ -202,15 +191,7 @@ namespace CourseProject.Controllers
         {
             var tagsReview = reviewVM.Review!.Tags!.Split(' ').Distinct();
             IEnumerable<Tag> tags = _tagRepo.GetAll();
-            int count;
-            if (!tags.Any())
-            {
-                count = 0;
-            }
-            else
-            {
-                count = tags.Max(x => x.Id);
-            }            
+            int count = !tags.Any() ? 0 : tags.Max(x => x.Id);            
             foreach (var item in tagsReview)
             {
                 if (tags.Any(x => x.Name == item))
