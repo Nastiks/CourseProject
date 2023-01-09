@@ -26,10 +26,13 @@
             string[] tags = review.Tags!.Split(' ');
             foreach (var item in tags)
             {
-                if (!tagAll.Contains(item))
+                if (!string.IsNullOrWhiteSpace(item))
                 {
-                    tagAll.Add(item);
-                }
+                    if (!tagAll.Contains(item))
+                    {
+                        tagAll.Add(item);
+                    }
+                }                
             }
         }
         @foreach (var tag in tagAll)

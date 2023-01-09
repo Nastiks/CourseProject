@@ -6,6 +6,7 @@ using CourseProject_Models.ViewModels;
 using CourseProject_Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CodeFixes;
 
 namespace CourseProject.Controllers
 {
@@ -65,6 +66,7 @@ namespace CourseProject.Controllers
         {
             if (ModelState.IsValid)
             {
+                FixTags(reviewVM);
                 var files = HttpContext.Request.Form.Files;
                 string webRootPath = _webHostEnvironment.WebRootPath;
 
@@ -135,6 +137,26 @@ namespace CourseProject.Controllers
             return View(reviewVM);
         }
 
+        private void FixTags(ReviewVM reviewVM)
+        {
+            if (string.IsNullOrWhiteSpace(reviewVM.Review!.Tags))
+                return;
+            List<string> tags = new();
+            var parts = reviewVM.Review!.Tags.Split(' ');
+            foreach (var item in parts)
+            {
+                string tag = item.Trim().Replace("#", string.Empty)
+                                        .Replace("\n", string.Empty)
+                                        .Replace("\t", string.Empty)
+                                        .Replace("\r", string.Empty);
+                if (!string.IsNullOrWhiteSpace(tag))
+                {
+                    tags.Add($"#{tag}");
+                }
+            }
+            reviewVM.Review.Tags = string.Join(" ", tags);
+        }
+
         public IActionResult Delete(int? id)
         {
             if (id == null || id == 0)
@@ -195,6 +217,10 @@ namespace CourseProject.Controllers
             foreach (var item in tagsReview)
             {
                 if (tags.Any(x => x.Name == item))
+                {
+                    continue;
+                }
+                if(string.IsNullOrWhiteSpace(item) || item.Trim().All(x => x == '#'))
                 {
                     continue;
                 }
